@@ -45,13 +45,9 @@ public:
 
     double cost(GridLocation from_node, GridLocation to_node) const;
 
-    void setWalls(int x1, int y1, int x2, int y2);
+    void setWalls(GridLocation loc);
 
-    void setForests(int x1, int y1, int x2, int y2);
-
-    int getWidth() const;
-
-    int getHeight() const;
+    void setForests(GridLocation loc);
 
 };
 

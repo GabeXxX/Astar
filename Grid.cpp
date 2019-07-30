@@ -42,28 +42,14 @@ double Grid::cost(GridLocation from_node, GridLocation to_node) const {
     return forests.find(to_node) != forests.end()? 5 : 1;
 }
 
-void Grid::setWalls(int x1, int y1, int x2, int y2) {
-    for (int x = x1; x < x2; x++) {
-        for (int y = y1; y < y2; y++) {
-            walls.insert(GridLocation(x, y));
-        }
-    }
+void Grid::setWalls(GridLocation loc) {
+            walls.insert(loc);
+
 }
 
-void Grid::setForests(int x1, int y1, int x2, int y2) {
-    for (int x = x1; x < x2; x++) {
-        for (int y = y1; y < y2; y++) {
-            forests.insert(GridLocation(x, y));
-        }
-    }
-}
+void Grid::setForests(GridLocation loc) {
+            forests.insert(loc);
 
-int Grid::getWidth() const {
-    return width;
-}
-
-int Grid::getHeight() const {
-    return height;
 }
 
 std::array<GridLocation, 4> Grid::DIRS =
