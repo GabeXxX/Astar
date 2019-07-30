@@ -3,6 +3,7 @@
 //
 
 #include "MapEditor.h"
+#include "Search.h"
 
 MapEditor::MapEditor(Grid &grid) : grid(grid),
                                     MAP_HEIGHT(grid.height),
@@ -119,12 +120,28 @@ void MapEditor::setGoal() {
         goal.y = j;
     }
 
+
     int i = goal.x;
     int j = goal.y;
     map[i][j].setFillColor(sf::Color::Red); //update color on grid for the new goal point
 
 
 }
+
+void MapEditor::startSearch() {
+    std::cout<<"enter released"<<std::endl;
+    std::unordered_map<GridLocation, GridLocation> came_from;
+    std::unordered_map<GridLocation, double> cost_so_far;
+    Search<GridLocation, Grid>::aStar(grid, start, goal, came_from, cost_so_far);
+
+    draw_grid(grid, 2, nullptr, nullptr);
+    std::cout << '\n';
+    draw_grid(grid, 2, nullptr, &came_from);
+    std::cout << '\n';
+    draw_grid(grid, 3, &cost_so_far, nullptr);
+    std::cout << '\n';
+}
+
 
 
 void MapEditor::run() {
@@ -143,8 +160,14 @@ void MapEditor::processEvents() {
         // "close requested" event: we close the renderWindow
         if (event.type == sf::Event::Closed)
             window.close();
-    }
 
+        if (event.type == sf::Event::KeyReleased) {
+            if (event.key.code == sf::Keyboard::Enter) {
+                startSearch();
+            }
+        }
+
+    }
 }
 
 void MapEditor::update() {
@@ -152,6 +175,7 @@ void MapEditor::update() {
     addForests();
     setStart();
     setGoal();
+
 }
 
 void MapEditor::render() {
@@ -167,4 +191,5 @@ void MapEditor::render() {
 
     window.display();
 }
+
 

@@ -65,6 +65,8 @@ public:
     void setStart();
 
     void setGoal();
+
+    void startSearch();
 };
 
 

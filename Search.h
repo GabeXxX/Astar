@@ -6,7 +6,11 @@
 #define ASTAR_SEARCH_H
 
 #include <unordered_map>
+#include <iomanip>
+#include <queue>
+
 #include "GridLocation.h"
+
 
 template<typename T, typename priority_t>
 struct PriorityQueue {
@@ -38,10 +42,9 @@ template<typename Location, typename Graph>
 class Search {
 
 public:
-    static void aStar(Graph graph,Location start,Location goal,
+    inline static void aStar(Graph graph,Location start,Location goal,
             std::unordered_map<Location, Location>& came_from,
             std::unordered_map<Location, double>& cost_so_far){
-        {
             PriorityQueue<Location, double> frontier;
             frontier.put(start, 0);
 
@@ -68,10 +71,38 @@ public:
             }
         }
 
-
-    }
-
 };
+
+
+template<class Graph>
+inline void draw_grid(const Graph& graph, int field_width,
+                      std::unordered_map<GridLocation, double>* distances=nullptr,
+                      std::unordered_map<GridLocation, GridLocation>* point_to=nullptr,
+                      std::vector<GridLocation>* path=nullptr) {
+    for (int y = 0; y != graph.height; ++y) {
+        for (int x = 0; x != graph.width; ++x) {
+            GridLocation id (x, y);
+            std::cout << std::left << std::setw(field_width);
+            if (graph.walls.find(id) != graph.walls.end()) {
+                std::cout << std::string(field_width, '#');
+            } else if (point_to != nullptr && point_to->count(id)) {
+                GridLocation next = (*point_to)[id];
+                if (next.x == x + 1) { std::cout << "> "; }
+                else if (next.x == x - 1) { std::cout << "< "; }
+                else if (next.y == y + 1) { std::cout << "v "; }
+                else if (next.y == y - 1) { std::cout << "^ "; }
+                else { std::cout << "* "; }
+            } else if (distances != nullptr && distances->count(id)) {
+                std::cout << (*distances)[id];
+            } else if (path != nullptr && find(path->begin(), path->end(), id) != path->end()) {
+                std::cout << '@';
+            } else {
+                std::cout << '.';
+            }
+        }
+        std::cout << '\n';
+    }
+}
 
 
 
