@@ -104,6 +104,22 @@ inline void draw_grid(const Graph& graph, int field_width,
     }
 }
 
+template<typename Location>
+std::vector<Location> reconstruct_path(
+        Location start, Location goal,
+        std::unordered_map<Location, Location> came_from
+) {
+    std::vector<Location> path;
+    Location current = goal;
+    while (current != start) {
+        path.push_back(current);
+        current = came_from[current];
+    }
+    path.push_back(start); // optional
+    std::reverse(path.begin(), path.end());
+    return path;
+}
+
 
 
 #endif //ASTAR_SEARCH_H

@@ -45,12 +45,12 @@ void MapEditor::addWalls() {
     {
         // get the local mouse position (relative to a window)
         sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-        std::cout<<"Position: "<<"("<<mousePosition.x<<","<<mousePosition.y<<")"<<std::endl;
+        //std::cout<<"Position: "<<"("<<mousePosition.x<<","<<mousePosition.y<<")"<<std::endl;
 
         //transform in map coordinates
         int i = (mousePosition.x-TILE_THICKNESS)/TILE_WIDTH;
         int j = (mousePosition.y-TILE_THICKNESS)/TILE_HEIGHT;
-        std::cout<<"Position: "<<"("<<i<<","<<j<<")"<<std::endl;
+        //std::cout<<"Position: "<<"("<<i<<","<<j<<")"<<std::endl;
 
         map[i][j].setFillColor(sf::Color::Black);
         grid.setWalls(GridLocation(i,j));
@@ -66,12 +66,12 @@ void MapEditor::addForests() {
 
         // get the local mouse position (relative to a window)
         sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-        std::cout << "Position: " << "(" << mousePosition.x << "," << mousePosition.y << ")" << std::endl;
+        //std::cout << "Position: " << "(" << mousePosition.x << "," << mousePosition.y << ")" << std::endl;
 
         //transform in map coordinates
         int i = (mousePosition.x - TILE_THICKNESS) / TILE_WIDTH;
         int j = (mousePosition.y - TILE_THICKNESS) / TILE_HEIGHT;
-        std::cout << "Position: " << "(" << i << "," << j << ")" << std::endl;
+        //std::cout << "Position: " << "(" << i << "," << j << ")" << std::endl;
 
         map[i][j].setFillColor(sf::Color::Green);
         grid.setForests(GridLocation(i, j));
@@ -83,12 +83,12 @@ void MapEditor::setStart() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Mouse::isButtonPressed(sf::Mouse::Left)){
         // get the local mouse position (relative to a window)
         sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-        std::cout << "Position: " << "(" << mousePosition.x << "," << mousePosition.y << ")" << std::endl;
+        //std::cout << "Position: " << "(" << mousePosition.x << "," << mousePosition.y << ")" << std::endl;
 
         //transform in map coordinates
         int i = (mousePosition.x - TILE_THICKNESS) / TILE_WIDTH;
         int j = (mousePosition.y - TILE_THICKNESS) / TILE_HEIGHT;
-        std::cout << "Position: " << "(" << i << "," << j << ")" << std::endl;
+        //std::cout << "Position: " << "(" << i << "," << j << ")" << std::endl;
 
         map[start.x][start.y].setFillColor(sf::Color::White); //reset color
 
@@ -107,12 +107,12 @@ void MapEditor::setGoal() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::G) && sf::Mouse::isButtonPressed(sf::Mouse::Left)){
         // get the local mouse position (relative to a window)
         sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-        std::cout << "Position: " << "(" << mousePosition.x << "," << mousePosition.y << ")" << std::endl;
+        //std::cout << "Position: " << "(" << mousePosition.x << "," << mousePosition.y << ")" << std::endl;
 
         //transform in map coordinates
         int i = (mousePosition.x - TILE_THICKNESS) / TILE_WIDTH;
         int j = (mousePosition.y - TILE_THICKNESS) / TILE_HEIGHT;
-        std::cout << "Position: " << "(" << i << "," << j << ")" << std::endl;
+        //std::cout << "Position: " << "(" << i << "," << j << ")" << std::endl;
 
         map[goal.x][goal.y].setFillColor(sf::Color::White); //reset color
 
@@ -140,6 +140,9 @@ void MapEditor::startSearch() {
     std::cout << '\n';
     draw_grid(grid, 3, &cost_so_far, nullptr);
     std::cout << '\n';
+
+    std::vector<GridLocation> path = reconstruct_path(start, goal, came_from);
+    draw_grid(grid, 3, nullptr, nullptr, &path);
 }
 
 

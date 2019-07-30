@@ -54,8 +54,4 @@ int main(){
     MapEditor editor(map);
     editor.run();
 
-    draw_grid(map, 2, nullptr, nullptr);
-    std::cout << '\n';
-
-
 }
