@@ -10,7 +10,9 @@ MapEditor::MapEditor(Grid &grid) : grid(grid),
                                       TILE_WIDTH(( (WINDOW_WIDTH-CONTROL_PANE_WIDTH) /MAP_WIDTH)),
                                        TILE_HEIGHT((WINDOW_HEIGHT/MAP_HEIGHT)),
                                         cellSize(TILE_WIDTH, TILE_HEIGHT),
-                                         window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "MapEditor"){
+                                         window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "MapEditor"),
+                                          start(0,0),
+                                           goal(19,13){
 
     //instantiate 2d object array for the map
     map = new sf::RectangleShape*[MAP_WIDTH];
@@ -38,12 +40,92 @@ MapEditor::MapEditor(Grid &grid) : grid(grid),
 
 void MapEditor::addWalls() {
 
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Mouse::isButtonPressed(sf::Mouse::Left))
+    {
+        // get the local mouse position (relative to a window)
+        sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+        std::cout<<"Position: "<<"("<<mousePosition.x<<","<<mousePosition.y<<")"<<std::endl;
+
+        //transform in map coordinates
+        int i = (mousePosition.x-TILE_THICKNESS)/TILE_WIDTH;
+        int j = (mousePosition.y-TILE_THICKNESS)/TILE_HEIGHT;
+        std::cout<<"Position: "<<"("<<i<<","<<j<<")"<<std::endl;
+
+        map[i][j].setFillColor(sf::Color::Black);
+        grid.setWalls(GridLocation(i,j));
+
+
+    }
+
 
 }
 
 void MapEditor::addForests() {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::F) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+        // get the local mouse position (relative to a window)
+        sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+        std::cout << "Position: " << "(" << mousePosition.x << "," << mousePosition.y << ")" << std::endl;
+
+        //transform in map coordinates
+        int i = (mousePosition.x - TILE_THICKNESS) / TILE_WIDTH;
+        int j = (mousePosition.y - TILE_THICKNESS) / TILE_HEIGHT;
+        std::cout << "Position: " << "(" << i << "," << j << ")" << std::endl;
+
+        map[i][j].setFillColor(sf::Color::Green);
+        grid.setForests(GridLocation(i, j));
+    }
 
 }
+
+void MapEditor::setStart() {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+        // get the local mouse position (relative to a window)
+        sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+        std::cout << "Position: " << "(" << mousePosition.x << "," << mousePosition.y << ")" << std::endl;
+
+        //transform in map coordinates
+        int i = (mousePosition.x - TILE_THICKNESS) / TILE_WIDTH;
+        int j = (mousePosition.y - TILE_THICKNESS) / TILE_HEIGHT;
+        std::cout << "Position: " << "(" << i << "," << j << ")" << std::endl;
+
+        map[start.x][start.y].setFillColor(sf::Color::White); //reset color
+
+        start.x = i;  //assign new start coordinates
+        start.y = j;
+    }
+
+    int i = start.x;
+    int j = start.y;
+    map[i][j].setFillColor(sf::Color::Magenta); //update color on grid for the new start point
+
+}
+
+void MapEditor::setGoal() {
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::G) && sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+        // get the local mouse position (relative to a window)
+        sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+        std::cout << "Position: " << "(" << mousePosition.x << "," << mousePosition.y << ")" << std::endl;
+
+        //transform in map coordinates
+        int i = (mousePosition.x - TILE_THICKNESS) / TILE_WIDTH;
+        int j = (mousePosition.y - TILE_THICKNESS) / TILE_HEIGHT;
+        std::cout << "Position: " << "(" << i << "," << j << ")" << std::endl;
+
+        map[goal.x][goal.y].setFillColor(sf::Color::White); //reset color
+
+        goal.x = i;  //assign new goal coordinates
+        goal.y = j;
+    }
+
+    int i = goal.x;
+    int j = goal.y;
+    map[i][j].setFillColor(sf::Color::Red); //update color on grid for the new goal point
+
+
+}
+
 
 void MapEditor::run() {
     while (window.isOpen())
@@ -66,7 +148,10 @@ void MapEditor::processEvents() {
 }
 
 void MapEditor::update() {
-
+    addWalls();
+    addForests();
+    setStart();
+    setGoal();
 }
 
 void MapEditor::render() {
@@ -82,3 +167,4 @@ void MapEditor::render() {
 
     window.display();
 }
+

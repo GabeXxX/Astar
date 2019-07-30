@@ -77,8 +77,7 @@ int main(){
     std::cout << '\n';
 
 
-    draw_grid(map, 2, nullptr, nullptr);
-    std::cout << '\n';
+
 
 
     GridLocation start(1, 4);
@@ -95,6 +94,9 @@ int main(){
 
     MapEditor editor(map);
     editor.run();
+
+    draw_grid(map, 2, nullptr, nullptr);
+    std::cout << '\n';
 
 
 

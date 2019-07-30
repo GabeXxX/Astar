@@ -38,6 +38,10 @@ private:
 
     sf::RectangleShape tile = sf::RectangleShape(sf::Vector2f(TILE_WIDTH, TILE_HEIGHT));
 
+    GridLocation start;
+
+    GridLocation goal;
+
 
 public:
 
@@ -57,6 +61,10 @@ public:
     void addWalls();
 
     void addForests();
+
+    void setStart();
+
+    void setGoal();
 };
 
 
