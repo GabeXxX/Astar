@@ -24,7 +24,7 @@ private:
 
     const int CONTROL_PANE_WIDTH = 400;
 
-    const int DELAY = 10; //in millisecond
+    const int DELAY = 5; //in millisecond
 
     const int MAP_HEIGHT;
 
@@ -49,7 +49,6 @@ private:
     std::unordered_map<GridLocation, GridLocation> came_from;
 
     std::unordered_map<GridLocation, double> cost_so_far;
-
 
 public:
 
