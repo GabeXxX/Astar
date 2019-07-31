@@ -11,8 +11,8 @@
 #include "Search.h"
 #include "MapEditor.h"
 
-#define MAP_WIDTH 20
-#define MAP_HEIGHT 14
+#define MAP_WIDTH 30
+#define MAP_HEIGHT 25
 
 
 int main(){

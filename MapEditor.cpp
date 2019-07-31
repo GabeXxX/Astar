@@ -129,20 +129,12 @@ void MapEditor::setGoal() {
 }
 
 void MapEditor::startSearch() {
-    std::cout<<"enter released"<<std::endl;
-    std::unordered_map<GridLocation, GridLocation> came_from;
-    std::unordered_map<GridLocation, double> cost_so_far;
-    Search<GridLocation, Grid>::aStar(grid, start, goal, came_from, cost_so_far);
 
-    draw_grid(grid, 2, nullptr, nullptr);
-    std::cout << '\n';
-    draw_grid(grid, 2, nullptr, &came_from);
-    std::cout << '\n';
-    draw_grid(grid, 3, &cost_so_far, nullptr);
-    std::cout << '\n';
+    Search s(*(this));
 
-    std::vector<GridLocation> path = reconstruct_path(start, goal, came_from);
-    draw_grid(grid, 3, nullptr, nullptr, &path);
+    s.aStar(grid, start, goal, came_from, cost_so_far);
+
+    s.reconstruct_path(start, goal, came_from);
 }
 
 
@@ -193,6 +185,37 @@ void MapEditor::render() {
     }
 
     window.display();
+}
+
+void MapEditor::notify(GridLocation& locPut, std::string description) {
+
+    sf::sleep(sf::milliseconds(DELAY));
+
+    int i = locPut.x;
+    int j = locPut.y;
+
+    if(description == "FRONTIER"){
+        map[i][j].setFillColor(sf::Color::Cyan);
+    }else if(description == "NEXT"){
+        map[i][j].setFillColor(sf::Color::Yellow);
+    } else if (description == "RECONSTRUCT"){
+        map[i][j].setFillColor(sf::Color::Blue);
+    }
+
+
+    render();
+
+}
+
+MapEditor::~MapEditor() {
+    // free dynamically allocated memory
+    for( int i = 0 ; i < MAP_WIDTH ; i++ )
+    {
+        delete[] map[i]; // delete array within matrix
+    }
+// delete actual matrix
+    delete[] map;
+
 }
 
 

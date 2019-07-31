@@ -10,13 +10,13 @@
 #include <queue>
 
 #include "GridLocation.h"
+#include "Subject.h"
 
 
 template<typename T, typename priority_t>
 struct PriorityQueue {
     typedef std::pair<priority_t, T> PQElement;
-    std::priority_queue<PQElement, std::vector<PQElement>,
-            std::greater<PQElement>> elements;
+    std::priority_queue<PQElement, std::vector<PQElement>, std::greater<PQElement>> elements;
 
     inline bool empty() const {
         return elements.empty();
@@ -33,92 +33,85 @@ struct PriorityQueue {
     }
 };
 
-inline double heuristic(GridLocation a, GridLocation b) {
-    return std::abs(a.x - b.x) + std::abs(a.y - b.y);
-}
 
-
-template<typename Location, typename Graph>
-class Search {
+class Search : Subject{
 
 public:
-    inline static void aStar(Graph graph,Location start,Location goal,
-            std::unordered_map<Location, Location>& came_from,
-            std::unordered_map<Location, double>& cost_so_far){
-            PriorityQueue<Location, double> frontier;
-            frontier.put(start, 0);
+    Search(Observer& o){
+        register_observer(o);
 
-            came_from[start] = start;
-            cost_so_far[start] = 0;
+    }
+
+    inline double heuristic(GridLocation a, GridLocation b) {
+        return std::abs(a.x - b.x) + std::abs(a.y - b.y);
+    }
+
+    void aStar(Grid graph,GridLocation start,GridLocation goal,
+                std::unordered_map<GridLocation, GridLocation>& came_from,
+                 std::unordered_map<GridLocation, double>& cost_so_far){
+
+        PriorityQueue<GridLocation, double> frontier;
+
+        frontier.put(start, 0);
+        notify_observers(start, "FRONTIER");
+
+        came_from[start] = start;
+        cost_so_far[start] = 0;
 
             while (!frontier.empty()) {
-                Location current = frontier.get();
+
+
+                GridLocation current = frontier.get();
 
                 if (current == goal) {
                     break;
                 }
 
-                for (Location next : graph.neighbors(current)) {
+                for (GridLocation next : graph.neighbors(current)) {
+
+                    notify_observers(next, "NEXT");
+
                     double new_cost = cost_so_far[current] + graph.cost(current, next);
                     if (cost_so_far.find(next) == cost_so_far.end()
                         || new_cost < cost_so_far[next]) {
                         cost_so_far[next] = new_cost;
                         double priority = new_cost + heuristic(next, goal);
                         frontier.put(next, priority);
+                        notify_observers(next, "FRONTIER");
                         came_from[next] = current;
                     }
                 }
             }
         }
 
+    inline std::vector<GridLocation> reconstruct_path(
+            GridLocation start, GridLocation goal,
+            std::unordered_map<GridLocation, GridLocation> came_from) {
+        std::vector<GridLocation> path;
+        GridLocation current = goal;
+        while (current != start) {
+            path.push_back(current);
+            current = came_from[current];
+            notify_observers(current, "RECONSTRUCT");
+        }
+        path.push_back(start); // optional
+        std::reverse(path.begin(), path.end());
+        return path;
+    }
+
+
+    void register_observer(Observer &o) override {
+        Subject::register_observer(o);
+    }
+
+    void notify_observers(GridLocation& locPut, std::string description) override {
+        Subject::notify_observers(locPut, description);
+    }
+
+
 };
 
 
-template<class Graph>
-inline void draw_grid(const Graph& graph, int field_width,
-                      std::unordered_map<GridLocation, double>* distances=nullptr,
-                      std::unordered_map<GridLocation, GridLocation>* point_to=nullptr,
-                      std::vector<GridLocation>* path=nullptr) {
-    for (int y = 0; y != graph.height; ++y) {
-        for (int x = 0; x != graph.width; ++x) {
-            GridLocation id (x, y);
-            std::cout << std::left << std::setw(field_width);
-            if (graph.walls.find(id) != graph.walls.end()) {
-                std::cout << std::string(field_width, '#');
-            } else if (point_to != nullptr && point_to->count(id)) {
-                GridLocation next = (*point_to)[id];
-                if (next.x == x + 1) { std::cout << "> "; }
-                else if (next.x == x - 1) { std::cout << "< "; }
-                else if (next.y == y + 1) { std::cout << "v "; }
-                else if (next.y == y - 1) { std::cout << "^ "; }
-                else { std::cout << "* "; }
-            } else if (distances != nullptr && distances->count(id)) {
-                std::cout << (*distances)[id];
-            } else if (path != nullptr && find(path->begin(), path->end(), id) != path->end()) {
-                std::cout << '@';
-            } else {
-                std::cout << '.';
-            }
-        }
-        std::cout << '\n';
-    }
-}
-
-template<typename Location>
-std::vector<Location> reconstruct_path(
-        Location start, Location goal,
-        std::unordered_map<Location, Location> came_from
-) {
-    std::vector<Location> path;
-    Location current = goal;
-    while (current != start) {
-        path.push_back(current);
-        current = came_from[current];
-    }
-    path.push_back(start); // optional
-    std::reverse(path.begin(), path.end());
-    return path;
-}
 
 
 

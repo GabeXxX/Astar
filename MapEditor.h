@@ -8,19 +8,23 @@
 
 #include <SFML/Graphics.hpp>
 #include "Grid.h"
+#include "Search.h"
 
 
-class MapEditor {
+
+class MapEditor : Observer{
 private:
     Grid grid;
 
-    const int  WINDOW_WIDTH = 1800;
+    const int  WINDOW_WIDTH = 2000;
 
-    const int WINDOW_HEIGHT = 1000;
+    const int WINDOW_HEIGHT = 1400;
 
     const int TILE_THICKNESS = 5;
 
     const int CONTROL_PANE_WIDTH = 400;
+
+    const int DELAY = 10; //in millisecond
 
     const int MAP_HEIGHT;
 
@@ -42,6 +46,10 @@ private:
 
     GridLocation goal;
 
+    std::unordered_map<GridLocation, GridLocation> came_from;
+
+    std::unordered_map<GridLocation, double> cost_so_far;
+
 
 public:
 
@@ -49,6 +57,8 @@ public:
       void run();
     */
     MapEditor(Grid& grid);
+
+    virtual ~MapEditor();
 
     void run();
 
@@ -67,6 +77,8 @@ public:
     void setGoal();
 
     void startSearch();
+
+    void notify(GridLocation& locPut, std::string description)override;
 };
 
 
