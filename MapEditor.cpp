@@ -4,6 +4,7 @@
 
 #include "MapEditor.h"
 #include "Search.h"
+#include "Button.h"
 
 MapEditor::MapEditor(Grid &grid) : grid(grid),
                                     MAP_HEIGHT(grid.height),
@@ -176,10 +177,13 @@ void MapEditor::update() {
 void MapEditor::render() {
     window.clear(sf::Color::Black);
 
+    Button prova(1600, 200, "prova");
+
     for (int i = 0; i < MAP_WIDTH; i++) {
         for (int j = 0; j < MAP_HEIGHT; j++) {
 
             window.draw(map[i][j]);
+            prova.draw(window);
 
         }
     }
