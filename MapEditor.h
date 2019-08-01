@@ -12,6 +12,7 @@
 #include "Button.h"
 
 
+
 class MapEditor : Observer{
 private:
 
@@ -41,7 +42,7 @@ private:
 
     sf::RectangleShape **map;  //2d array contenente le tile della mappa
 
-    sf::RectangleShape tile = sf::RectangleShape(sf::Vector2f(TILE_WIDTH, TILE_HEIGHT));
+    sf::RectangleShape *tile;
 
     GridLocation start;
 
@@ -55,6 +56,7 @@ private:
                        Button(WINDOW_WIDTH-(CONTROL_PANE_WIDTH/2)-Button::BUTTON_WIDTH/2+TILE_THICKNESS, (WINDOW_HEIGHT/2)-(Button::BUTTON_HEIGHT/2)-100, "Reset"),
                         Button(WINDOW_WIDTH-(CONTROL_PANE_WIDTH/2)-Button::BUTTON_WIDTH/2+TILE_THICKNESS, (WINDOW_HEIGHT/2)-(Button::BUTTON_HEIGHT/2)+100, "Instructions"),
                          Button(WINDOW_WIDTH-(CONTROL_PANE_WIDTH/2)-Button::BUTTON_WIDTH/2+TILE_THICKNESS, (WINDOW_HEIGHT/2)-(Button::BUTTON_HEIGHT/2)+300, "Settings")};
+
 
 public:
 
@@ -84,9 +86,9 @@ public:
 
     void instructions();
 
-    void insertText(sf::Event& event);
-
     void settings();
+
+    void drawMap();
 
     void notify(GridLocation& locPut, std::string description)override;
 };

@@ -13,26 +13,9 @@ MapEditor::MapEditor() :
                                          window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "MapEditor"),
                                           start(0,0),
                                            goal(MAP_WIDTH-1,MAP_HEIGHT-1){
+    drawMap();
 
-    grid = new Grid(MAP_WIDTH,MAP_HEIGHT);
-    //instantiate 2d object array for the map
-    map = new sf::RectangleShape*[MAP_WIDTH];
-    for (int i = 0; i < MAP_WIDTH; ++i)
-        map[i] = new sf::RectangleShape[MAP_HEIGHT];
-    //create the map
-    for (int i = 0; i < MAP_WIDTH; i++) {
-        for (int j = 0; j < MAP_HEIGHT; j++) {
 
-            map[i][j] = tile;
-            map[i][j].setSize(cellSize);
-            map[i][j].setPosition(sf::Vector2f(i*TILE_WIDTH + TILE_THICKNESS, j*TILE_HEIGHT+ TILE_THICKNESS));
-            map[i][j].setFillColor(sf::Color::White);
-            map[i][j].setOutlineColor(sf::Color::Blue);
-            map[i][j].setOutlineThickness(5.0f);
-
-        }
-
-    }
 
 }
 
@@ -356,17 +339,15 @@ void MapEditor::settings() {
             {
                 if (static_cast<char>(event.text.unicode) == 'w'){
                     MAP_WIDTH++;
-                    TILE_WIDTH = ( (WINDOW_WIDTH-CONTROL_PANE_WIDTH) /MAP_WIDTH);
+                    TILE_WIDTH = ((WINDOW_WIDTH-CONTROL_PANE_WIDTH) /MAP_WIDTH);
                     TILE_HEIGHT = (WINDOW_HEIGHT/MAP_HEIGHT);
                     cellSize.x = TILE_WIDTH;
                     cellSize.y = TILE_HEIGHT;
-                    for (int i = 0; i < MAP_WIDTH; i++) {
-                        for (int j = 0; j < MAP_HEIGHT; j++) {
-                            map[i][j].setSize(cellSize);
 
-                        }
-                    }
+                    drawMap();
+                    render();
                     resetGrid();
+
 
                 }
 
@@ -376,6 +357,12 @@ void MapEditor::settings() {
             {
                 if (static_cast<char>(event.text.unicode) == 'q'){
                     MAP_WIDTH--;
+                    TILE_WIDTH = ((WINDOW_WIDTH-CONTROL_PANE_WIDTH) /MAP_WIDTH);
+                    TILE_HEIGHT = (WINDOW_HEIGHT/MAP_HEIGHT);
+                    cellSize.x = TILE_WIDTH;
+                    cellSize.y = TILE_HEIGHT;
+
+                    drawMap();
                     render();
                     resetGrid();
 
@@ -385,8 +372,14 @@ void MapEditor::settings() {
             {
                 if (static_cast<char>(event.text.unicode) == 'r'){
                     MAP_HEIGHT++;
+                    TILE_WIDTH = ((WINDOW_WIDTH-CONTROL_PANE_WIDTH) /MAP_WIDTH);
+                    TILE_HEIGHT = (WINDOW_HEIGHT/MAP_HEIGHT);
+                    cellSize.x = TILE_WIDTH;
+                    cellSize.y = TILE_HEIGHT;
+
+                    drawMap();
                     render();
-                    resetGrid();
+                    resetGrid();;
 
                 }
             }
@@ -394,6 +387,12 @@ void MapEditor::settings() {
             {
                 if (static_cast<char>(event.text.unicode) == 'e'){
                     MAP_HEIGHT--;
+                    TILE_WIDTH = ((WINDOW_WIDTH-CONTROL_PANE_WIDTH) /MAP_WIDTH);
+                    TILE_HEIGHT = (WINDOW_HEIGHT/MAP_HEIGHT);
+                    cellSize.x = TILE_WIDTH;
+                    cellSize.y = TILE_HEIGHT;
+
+                    drawMap();
                     render();
                     resetGrid();
 
@@ -403,8 +402,6 @@ void MapEditor::settings() {
             {
                 if (static_cast<char>(event.text.unicode) == 'y'){
                     DELAY++;
-                    render();
-                    resetGrid();
 
                 }
             }
@@ -412,8 +409,6 @@ void MapEditor::settings() {
             {
                 if (static_cast<char>(event.text.unicode) == 't'){
                     DELAY--;
-                    render();
-                    resetGrid();
 
                 }
             }
@@ -431,13 +426,33 @@ void MapEditor::settings() {
         sf::Text heightText;
         sf::Text velocityText;
 
+        sf::Text widthInfo;
+        sf::Text eightInfo;
+        sf::Text velocityInfo;
+
+        widthInfo.setString("Hold Q or W to increase or \ndecrease number of horizontal tile ");
+        eightInfo.setString("Hold E or R to increase or \ndecrease number of vertical tile");
+        velocityInfo.setString("Hold T or Y to increase or \ndecrease the velocity of A*");
+
+        widthInfo.setScale(0.7, 0.7);
+        eightInfo.setScale(0.7, 0.7);
+        velocityInfo.setScale(0.7, 0.7);
+
+        widthInfo.setFont(fontSetting);
+        eightInfo.setFont(fontSetting);
+        velocityInfo.setFont(fontSetting);
+
+        widthInfo.setPosition(0,90);
+        eightInfo.setPosition(0,290);
+        velocityInfo.setPosition(0,490);
+
         widthText.setFont(fontSetting);
         heightText.setFont(fontSetting);
         velocityText.setFont(fontSetting);
 
         widthText.setString("Grid width: ");
         heightText.setString("Grid height: ");
-        velocityText.setString("Velocity(millisecond): ");
+        velocityText.setString("Delay(millisecond): ");
 
         widthText.setPosition(0,50);
         heightText.setPosition(0,250);
@@ -456,6 +471,10 @@ void MapEditor::settings() {
         setting.draw(heightText);
         setting.draw(velocityText);
 
+        setting.draw(widthInfo);
+        setting.draw(eightInfo);
+        setting.draw(velocityInfo);
+
 
         widthButton.draw(setting);
         heightButton.draw(setting);
@@ -464,6 +483,32 @@ void MapEditor::settings() {
 
         // end the current frame
         setting.display();
+
+    }
+
+}
+
+void MapEditor::drawMap() {
+
+    tile = new sf::RectangleShape(sf::Vector2f(TILE_WIDTH, TILE_HEIGHT));
+
+    grid = new Grid(MAP_WIDTH,MAP_HEIGHT);
+    //instantiate 2d object array for the map
+    map = new sf::RectangleShape*[MAP_WIDTH];
+    for (int i = 0; i < MAP_WIDTH; ++i)
+        map[i] = new sf::RectangleShape[MAP_HEIGHT];
+    //create the map
+    for (int i = 0; i < MAP_WIDTH; i++) {
+        for (int j = 0; j < MAP_HEIGHT; j++) {
+
+            map[i][j] = *(tile);
+            map[i][j].setSize(cellSize);
+            map[i][j].setPosition(sf::Vector2f(i*TILE_WIDTH + TILE_THICKNESS, j*TILE_HEIGHT+ TILE_THICKNESS));
+            map[i][j].setFillColor(sf::Color::White);
+            map[i][j].setOutlineColor(sf::Color::Blue);
+            map[i][j].setOutlineThickness(5.0f);
+
+        }
 
     }
 
