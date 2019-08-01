@@ -9,26 +9,25 @@
 #include <SFML/Graphics.hpp>
 #include "Grid.h"
 #include "Search.h"
-
+#include "Button.h"
 
 
 class MapEditor : Observer{
 private:
-    Grid grid;
 
-    const int  WINDOW_WIDTH = 2000;
+    const int  WINDOW_WIDTH = 1800;
 
-    const int WINDOW_HEIGHT = 1400;
+    const int WINDOW_HEIGHT = 1200;
 
     const int TILE_THICKNESS = 5;
 
     const int CONTROL_PANE_WIDTH = 400;
 
-    const int DELAY = 5; //in millisecond
+    int DELAY = 5; //in millisecond
 
-    const int MAP_HEIGHT;
+    int MAP_WIDTH = 50;
 
-    const int MAP_WIDTH;
+    int MAP_HEIGHT = 40;
 
     const int TILE_WIDTH;
 
@@ -37,6 +36,8 @@ private:
     sf::Vector2f cellSize;
 
     sf::RenderWindow window;
+
+    Grid grid;
 
     sf::RectangleShape **map;  //2d array contenente le tile della mappa
 
@@ -50,12 +51,14 @@ private:
 
     std::unordered_map<GridLocation, double> cost_so_far;
 
+    Button menu[4] = {Button(WINDOW_WIDTH-(CONTROL_PANE_WIDTH/2)-Button::BUTTON_WIDTH/2+TILE_THICKNESS, (WINDOW_HEIGHT/2)-(Button::BUTTON_HEIGHT/2)-300, "Run"),
+                       Button(WINDOW_WIDTH-(CONTROL_PANE_WIDTH/2)-Button::BUTTON_WIDTH/2+TILE_THICKNESS, (WINDOW_HEIGHT/2)-(Button::BUTTON_HEIGHT/2)-100, "Reset"),
+                        Button(WINDOW_WIDTH-(CONTROL_PANE_WIDTH/2)-Button::BUTTON_WIDTH/2+TILE_THICKNESS, (WINDOW_HEIGHT/2)-(Button::BUTTON_HEIGHT/2)+100, "Instructions"),
+                         Button(WINDOW_WIDTH-(CONTROL_PANE_WIDTH/2)-Button::BUTTON_WIDTH/2+TILE_THICKNESS, (WINDOW_HEIGHT/2)-(Button::BUTTON_HEIGHT/2)+300, "Settings")};
+
 public:
 
-    /*Game();
-      void run();
-    */
-    MapEditor(Grid& grid);
+    MapEditor();
 
     virtual ~MapEditor();
 
@@ -76,6 +79,14 @@ public:
     void setGoal();
 
     void startSearch();
+
+    void resetGrid();
+
+    void instructions();
+
+    void insertText(sf::Event& event);
+
+    void settings();
 
     void notify(GridLocation& locPut, std::string description)override;
 };

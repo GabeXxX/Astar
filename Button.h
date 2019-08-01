@@ -9,12 +9,17 @@
 
 class Button {
 private:
-    const int BUTTON_WIDTH = 200;
-    const int BUTTON_HEIGHT = 100;
+
     int x;
+
     int y;
+
+    std::string text;
+
     sf::RectangleShape shapeButton;
+
     sf::Text textButton;
+
     sf::Font fontButton;
 
 public:
@@ -22,8 +27,13 @@ public:
 
     void draw(sf::RenderWindow& window);
 
-};
+    bool clicked(sf::Event& event);
 
+    static const int BUTTON_WIDTH = 250;
+
+    static const int BUTTON_HEIGHT = 100;
+
+};
 
 
 #endif //ASTAR_BUTTON_H
