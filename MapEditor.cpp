@@ -6,7 +6,7 @@
 #include "Search.h"
 #include "Button.h"
 
-MapEditor::MapEditor() :             grid(MAP_WIDTH,MAP_HEIGHT),
+MapEditor::MapEditor() :
                                       TILE_WIDTH(( (WINDOW_WIDTH-CONTROL_PANE_WIDTH) /MAP_WIDTH)),
                                        TILE_HEIGHT((WINDOW_HEIGHT/MAP_HEIGHT)),
                                         cellSize(TILE_WIDTH, TILE_HEIGHT),
@@ -14,6 +14,7 @@ MapEditor::MapEditor() :             grid(MAP_WIDTH,MAP_HEIGHT),
                                           start(0,0),
                                            goal(MAP_WIDTH-1,MAP_HEIGHT-1){
 
+    grid = new Grid(MAP_WIDTH,MAP_HEIGHT);
     //instantiate 2d object array for the map
     map = new sf::RectangleShape*[MAP_WIDTH];
     for (int i = 0; i < MAP_WIDTH; ++i)
@@ -52,7 +53,7 @@ void MapEditor::addWalls() {
         //std::cout<<"Position: "<<"("<<i<<","<<j<<")"<<std::endl;
 
         map[i][j].setFillColor(sf::Color::Black);
-        grid.setWalls(GridLocation(i,j));
+        grid->setWalls(GridLocation(i,j));
 
 
     }
@@ -73,7 +74,7 @@ void MapEditor::addForests() {
         //std::cout << "Position: " << "(" << i << "," << j << ")" << std::endl;
 
         map[i][j].setFillColor(sf::Color::Green);
-        grid.setForests(GridLocation(i, j));
+        grid->setForests(GridLocation(i, j));
     }
 
 }
@@ -131,7 +132,7 @@ void MapEditor::startSearch() {
 
     Search s(*(this));
 
-    s.aStar(grid, start, goal, came_from, cost_so_far);
+    s.aStar(*(grid), start, goal, came_from, cost_so_far);
 
     s.reconstruct_path(start, goal, came_from);
 }
@@ -251,9 +252,9 @@ void MapEditor::resetGrid() {
     goal.y = MAP_HEIGHT-1;
     map[start.x][start.y].setFillColor(sf::Color::Red);
 
-    grid.forests.clear();
+    grid->forests.clear();
 
-    grid.walls.clear();
+    grid->walls.clear();
 
     came_from.clear();
 
@@ -334,16 +335,89 @@ void MapEditor::settings() {
 
     // run the program as long as the window is open
     while (setting.isOpen()) {
+
         // check all the window's events that were triggered since the last iteration of the loop
         sf::Event event;
+
         while (setting.pollEvent(event)) {
             // "close requested" event: we close the window
             if (event.type == sf::Event::Closed)
                 setting.close();
+
+            /*if(widthButton.clicked(event) && event.mouseButton.button == sf::Mouse::Left){
+                MAP_WIDTH++;
+                std::cout<<MAP_WIDTH<<std::endl;
+            }
+            if(widthButton.clicked(event) && event.mouseButton.button == sf::Mouse::Right){
+                MAP_WIDTH--;
+                std::cout<<MAP_WIDTH<<std::endl;
+            }*/
+            if (event.type == sf::Event::TextEntered)
+            {
+                if (static_cast<char>(event.text.unicode) == 'w'){
+                    MAP_WIDTH++;
+                    TILE_WIDTH = ( (WINDOW_WIDTH-CONTROL_PANE_WIDTH) /MAP_WIDTH);
+                    TILE_HEIGHT = (WINDOW_HEIGHT/MAP_HEIGHT);
+                    cellSize.x = TILE_WIDTH;
+                    cellSize.y = TILE_HEIGHT;
+                    for (int i = 0; i < MAP_WIDTH; i++) {
+                        for (int j = 0; j < MAP_HEIGHT; j++) {
+                            map[i][j].setSize(cellSize);
+
+                        }
+                    }
+                    resetGrid();
+
+                }
+
+
+            }
+            if (event.type == sf::Event::TextEntered)
+            {
+                if (static_cast<char>(event.text.unicode) == 'q'){
+                    MAP_WIDTH--;
+                    render();
+                    resetGrid();
+
+                }
+            }
+            if (event.type == sf::Event::TextEntered)
+            {
+                if (static_cast<char>(event.text.unicode) == 'r'){
+                    MAP_HEIGHT++;
+                    render();
+                    resetGrid();
+
+                }
+            }
+            if (event.type == sf::Event::TextEntered)
+            {
+                if (static_cast<char>(event.text.unicode) == 'e'){
+                    MAP_HEIGHT--;
+                    render();
+                    resetGrid();
+
+                }
+            }
+            if (event.type == sf::Event::TextEntered)
+            {
+                if (static_cast<char>(event.text.unicode) == 'y'){
+                    DELAY++;
+                    render();
+                    resetGrid();
+
+                }
+            }
+            if (event.type == sf::Event::TextEntered)
+            {
+                if (static_cast<char>(event.text.unicode) == 't'){
+                    DELAY--;
+                    render();
+                    resetGrid();
+
+                }
+            }
         }
-
-
-        setting.clear(sf::Color(36, 36, 37));
 
         // draw everything here...
         sf::Font fontSetting;
@@ -351,6 +425,7 @@ void MapEditor::settings() {
         if (!fontSetting.loadFromFile("../Font/menlo.ttc")) {
             // handle error
         }
+
 
         sf::Text widthText;
         sf::Text heightText;
@@ -368,18 +443,25 @@ void MapEditor::settings() {
         heightText.setPosition(0,250);
         velocityText.setPosition(0,450);
 
+        Button widthButton(500, widthText.getPosition().y - (widthText.getGlobalBounds().height/2), std::to_string(MAP_WIDTH));
+        Button heightButton(500, heightText.getPosition().y - (heightText.getGlobalBounds().height/2), std::to_string(MAP_HEIGHT));
+        Button velocityButton(500, velocityText.getPosition().y - (velocityText.getGlobalBounds().height/2), std::to_string(DELAY));
+
+
+
+        setting.clear(sf::Color(36, 36, 37));
+
 
         setting.draw(widthText);
         setting.draw(heightText);
         setting.draw(velocityText);
 
-        Button widthButton(500, widthText.getPosition().y - (widthText.getGlobalBounds().height/2), std::to_string(MAP_WIDTH));
-        Button heightButton(500, heightText.getPosition().y - (heightText.getGlobalBounds().height/2), std::to_string(MAP_HEIGHT));
-        Button velocityButton(500, velocityText.getPosition().y - (velocityText.getGlobalBounds().height/2), std::to_string(DELAY));
 
         widthButton.draw(setting);
         heightButton.draw(setting);
         velocityButton.draw(setting);
+
+
         // end the current frame
         setting.display();
 

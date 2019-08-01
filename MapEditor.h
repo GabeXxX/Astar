@@ -29,15 +29,15 @@ private:
 
     int MAP_HEIGHT = 40;
 
-    const int TILE_WIDTH;
+    int TILE_WIDTH;
 
-    const int TILE_HEIGHT;
+    int TILE_HEIGHT;
 
     sf::Vector2f cellSize;
 
     sf::RenderWindow window;
 
-    Grid grid;
+    Grid *grid;
 
     sf::RectangleShape **map;  //2d array contenente le tile della mappa
 
