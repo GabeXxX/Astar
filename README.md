@@ -1,5 +1,5 @@
 # Astar
-This is my simple implementation of an <strong>A* pathfinding visualization</strong> program.
+This is my simple implementation of an <strong>A* pathfinding visualization</strong> program using <strong>SFML</strong>.
 
 That's it: set a start and a goal node on the map, press Run, and program will show you 
 the most suitable path among the two nodes.
