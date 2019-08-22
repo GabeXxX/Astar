@@ -215,7 +215,9 @@ MapEditor::~MapEditor() {
         delete[] map[i]; // delete array within matrix
     }
 // delete actual matrix
-    delete[] map;
+    delete [] map;
+    delete grid;
+    delete tile;
 
 }
 
