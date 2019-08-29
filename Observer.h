@@ -11,7 +11,7 @@
 class Observer
 {
 public:
-    virtual void notify(GridLocation& locPut, std::string description) = 0;
+    virtual void update(GridLocation &locPut, std::string description) = 0;
 };
 
 

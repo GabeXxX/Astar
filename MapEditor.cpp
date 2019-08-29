@@ -7,41 +7,32 @@
 #include "Button.h"
 
 MapEditor::MapEditor() :
-                                      TILE_WIDTH(( (WINDOW_WIDTH-CONTROL_PANE_WIDTH) /MAP_WIDTH)),
-                                       TILE_HEIGHT((WINDOW_HEIGHT/MAP_HEIGHT)),
-                                        cellSize(TILE_WIDTH, TILE_HEIGHT),
-                                         window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "MapEditor"),
-                                          start(0,0),
-                                           goal(MAP_WIDTH-1,MAP_HEIGHT-1){
+        TILE_WIDTH(((WINDOW_WIDTH - CONTROL_PANE_WIDTH) / MAP_WIDTH)),
+        TILE_HEIGHT((WINDOW_HEIGHT / MAP_HEIGHT)),
+        cellSize(TILE_WIDTH, TILE_HEIGHT),
+        window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "MapEditor"),
+        start(0, 0),
+        goal(MAP_WIDTH - 1, MAP_HEIGHT - 1) {
     drawMap();
-
-
 
 }
 
 
-
-
 void MapEditor::addWalls() {
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Mouse::isButtonPressed(sf::Mouse::Left))
-    {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         // get the local mouse position (relative to a window)
         sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
         //std::cout<<"Position: "<<"("<<mousePosition.x<<","<<mousePosition.y<<")"<<std::endl;
 
         //transform in map coordinates
-        int i = (mousePosition.x-TILE_THICKNESS)/TILE_WIDTH;
-        int j = (mousePosition.y-TILE_THICKNESS)/TILE_HEIGHT;
+        int i = (mousePosition.x - TILE_THICKNESS) / TILE_WIDTH;
+        int j = (mousePosition.y - TILE_THICKNESS) / TILE_HEIGHT;
         //std::cout<<"Position: "<<"("<<i<<","<<j<<")"<<std::endl;
 
         map[i][j].setFillColor(sf::Color::Black);
-        grid->setWalls(GridLocation(i,j));
-
-
+        grid->setWalls(GridLocation(i, j));
     }
-
-
 }
 
 void MapEditor::addForests() {
@@ -63,7 +54,7 @@ void MapEditor::addForests() {
 }
 
 void MapEditor::setStart() {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         // get the local mouse position (relative to a window)
         sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
         //std::cout << "Position: " << "(" << mousePosition.x << "," << mousePosition.y << ")" << std::endl;
@@ -87,7 +78,7 @@ void MapEditor::setStart() {
 
 void MapEditor::setGoal() {
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::G) && sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::G) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
         // get the local mouse position (relative to a window)
         sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
         //std::cout << "Position: " << "(" << mousePosition.x << "," << mousePosition.y << ")" << std::endl;
@@ -103,11 +94,9 @@ void MapEditor::setGoal() {
         goal.y = j;
     }
 
-
     int i = goal.x;
     int j = goal.y;
     map[i][j].setFillColor(sf::Color::Red); //update color on grid for the new goal point
-
 
 }
 
@@ -121,10 +110,8 @@ void MapEditor::startSearch() {
 }
 
 
-
 void MapEditor::run() {
-    while (window.isOpen())
-    {
+    while (window.isOpen()) {
         processEvents();
         update();
         render();
@@ -142,17 +129,17 @@ void MapEditor::processEvents() {
         if (menu[0].clicked(event)) {
 
             startSearch();
-         }
+        }
         if (menu[1].clicked(event)) {
 
-             resetGrid();
-         }
+            resetGrid();
+        }
         if (menu[2].clicked(event)) {
-             instructions();
-         }
+            instructions();
+        }
         if (menu[3].clicked(event)) {
-             settings();
-         }
+            settings();
+        }
 
     }
 
@@ -167,7 +154,7 @@ void MapEditor::update() {
 }
 
 void MapEditor::render() {
-    window.clear(sf::Color(36,36,37));
+    window.clear(sf::Color(36, 36, 37));
 
 
     for (int i = 0; i < MAP_WIDTH; i++) {
@@ -184,22 +171,21 @@ void MapEditor::render() {
     menu[3].draw(window);
 
 
-
     window.display();
 }
 
-void MapEditor::notify(GridLocation& locPut, std::string description) {
+void MapEditor::update(GridLocation &locPut, std::string description) {
 
     sf::sleep(sf::milliseconds(DELAY));
 
     int i = locPut.x;
     int j = locPut.y;
 
-    if(description == "FRONTIER"){
+    if (description == "FRONTIER") {
         map[i][j].setFillColor(sf::Color::Cyan);
-    }else if(description == "NEXT"){
+    } else if (description == "NEXT") {
         map[i][j].setFillColor(sf::Color::Yellow);
-    } else if (description == "RECONSTRUCT"){
+    } else if (description == "RECONSTRUCT") {
         map[i][j].setFillColor(sf::Color::Blue);
     }
 
@@ -210,12 +196,11 @@ void MapEditor::notify(GridLocation& locPut, std::string description) {
 
 MapEditor::~MapEditor() {
     // free dynamically allocated memory
-    for( int i = 0 ; i < MAP_WIDTH ; i++ )
-    {
+    for (int i = 0; i < MAP_WIDTH; i++) {
         delete[] map[i]; // delete array within matrix
     }
 // delete actual matrix
-    delete [] map;
+    delete[] map;
     delete grid;
     delete tile;
 
@@ -233,8 +218,8 @@ void MapEditor::resetGrid() {
     start.y = 0;
     map[start.x][start.y].setFillColor(sf::Color::Magenta);
 
-    goal.x = MAP_WIDTH-1;
-    goal.y = MAP_HEIGHT-1;
+    goal.x = MAP_WIDTH - 1;
+    goal.y = MAP_HEIGHT - 1;
     map[start.x][start.y].setFillColor(sf::Color::Red);
 
     grid->forests.clear();
@@ -252,25 +237,22 @@ void MapEditor::instructions() {
     sf::RenderWindow instruction(sf::VideoMode(1500, 600), "Instructions");
 
     // run the program as long as the window is open
-    while (instruction.isOpen())
-    {
+    while (instruction.isOpen()) {
         // check all the window's events that were triggered since the last iteration of the loop
         sf::Event event;
-        while (instruction.pollEvent(event))
-        {
+        while (instruction.pollEvent(event)) {
             // "close requested" event: we close the window
             if (event.type == sf::Event::Closed)
                 instruction.close();
         }
 
 
-        instruction.clear(sf::Color(36,36,37));
+        instruction.clear(sf::Color(36, 36, 37));
 
         // draw everything here...
         sf::Font fontInstruction;
 
-        if (!fontInstruction.loadFromFile("../Font/menlo.ttc"))
-        {
+        if (!fontInstruction.loadFromFile("../Font/menlo.ttc")) {
             // handle error
         }
 
@@ -286,7 +268,8 @@ void MapEditor::instructions() {
         wallText.setString("Hold W + Mouse SX on the map to create new walls");
         forestText.setString("Hold F + Mouse SX on the map to create new forest");
         runText.setString("Click Run button to start the A* search alghorithm on the current map configuration");
-        resetText.setString("Click Reset button to come back to default map configuration. \nReset map every time you want to re-execute A*");
+        resetText.setString(
+                "Click Reset button to come back to default map configuration. \nReset map every time you want to re-execute A*");
 
         startText.setFont(fontInstruction);
         goalText.setFont(fontInstruction);
@@ -295,12 +278,12 @@ void MapEditor::instructions() {
         runText.setFont(fontInstruction);
         resetText.setFont(fontInstruction);
 
-        startText.setPosition(0,0);
-        goalText.setPosition(0,100);
-        wallText.setPosition(0,200);
-        forestText.setPosition(0,300);
-        runText.setPosition(0,400);
-        resetText.setPosition(0,500);
+        startText.setPosition(0, 0);
+        goalText.setPosition(0, 100);
+        wallText.setPosition(0, 200);
+        forestText.setPosition(0, 300);
+        runText.setPosition(0, 400);
+        resetText.setPosition(0, 500);
 
         instruction.draw(startText);
         instruction.draw(goalText);
@@ -337,12 +320,11 @@ void MapEditor::settings() {
                 MAP_WIDTH--;
                 std::cout<<MAP_WIDTH<<std::endl;
             }*/
-            if (event.type == sf::Event::TextEntered)
-            {
-                if (static_cast<char>(event.text.unicode) == 'w'){
+            if (event.type == sf::Event::TextEntered) {
+                if (static_cast<char>(event.text.unicode) == 'w') {
                     MAP_WIDTH++;
-                    TILE_WIDTH = ((WINDOW_WIDTH-CONTROL_PANE_WIDTH) /MAP_WIDTH);
-                    TILE_HEIGHT = (WINDOW_HEIGHT/MAP_HEIGHT);
+                    TILE_WIDTH = ((WINDOW_WIDTH - CONTROL_PANE_WIDTH) / MAP_WIDTH);
+                    TILE_HEIGHT = (WINDOW_HEIGHT / MAP_HEIGHT);
                     cellSize.x = TILE_WIDTH;
                     cellSize.y = TILE_HEIGHT;
 
@@ -355,12 +337,11 @@ void MapEditor::settings() {
 
 
             }
-            if (event.type == sf::Event::TextEntered)
-            {
-                if (static_cast<char>(event.text.unicode) == 'q'){
+            if (event.type == sf::Event::TextEntered) {
+                if (static_cast<char>(event.text.unicode) == 'q') {
                     MAP_WIDTH--;
-                    TILE_WIDTH = ((WINDOW_WIDTH-CONTROL_PANE_WIDTH) /MAP_WIDTH);
-                    TILE_HEIGHT = (WINDOW_HEIGHT/MAP_HEIGHT);
+                    TILE_WIDTH = ((WINDOW_WIDTH - CONTROL_PANE_WIDTH) / MAP_WIDTH);
+                    TILE_HEIGHT = (WINDOW_HEIGHT / MAP_HEIGHT);
                     cellSize.x = TILE_WIDTH;
                     cellSize.y = TILE_HEIGHT;
 
@@ -370,12 +351,11 @@ void MapEditor::settings() {
 
                 }
             }
-            if (event.type == sf::Event::TextEntered)
-            {
-                if (static_cast<char>(event.text.unicode) == 'r'){
+            if (event.type == sf::Event::TextEntered) {
+                if (static_cast<char>(event.text.unicode) == 'r') {
                     MAP_HEIGHT++;
-                    TILE_WIDTH = ((WINDOW_WIDTH-CONTROL_PANE_WIDTH) /MAP_WIDTH);
-                    TILE_HEIGHT = (WINDOW_HEIGHT/MAP_HEIGHT);
+                    TILE_WIDTH = ((WINDOW_WIDTH - CONTROL_PANE_WIDTH) / MAP_WIDTH);
+                    TILE_HEIGHT = (WINDOW_HEIGHT / MAP_HEIGHT);
                     cellSize.x = TILE_WIDTH;
                     cellSize.y = TILE_HEIGHT;
 
@@ -385,12 +365,11 @@ void MapEditor::settings() {
 
                 }
             }
-            if (event.type == sf::Event::TextEntered)
-            {
-                if (static_cast<char>(event.text.unicode) == 'e'){
+            if (event.type == sf::Event::TextEntered) {
+                if (static_cast<char>(event.text.unicode) == 'e') {
                     MAP_HEIGHT--;
-                    TILE_WIDTH = ((WINDOW_WIDTH-CONTROL_PANE_WIDTH) /MAP_WIDTH);
-                    TILE_HEIGHT = (WINDOW_HEIGHT/MAP_HEIGHT);
+                    TILE_WIDTH = ((WINDOW_WIDTH - CONTROL_PANE_WIDTH) / MAP_WIDTH);
+                    TILE_HEIGHT = (WINDOW_HEIGHT / MAP_HEIGHT);
                     cellSize.x = TILE_WIDTH;
                     cellSize.y = TILE_HEIGHT;
 
@@ -400,16 +379,14 @@ void MapEditor::settings() {
 
                 }
             }
-            if (event.type == sf::Event::TextEntered)
-            {
-                if (static_cast<char>(event.text.unicode) == 'y'){
+            if (event.type == sf::Event::TextEntered) {
+                if (static_cast<char>(event.text.unicode) == 'y') {
                     DELAY++;
 
                 }
             }
-            if (event.type == sf::Event::TextEntered)
-            {
-                if (static_cast<char>(event.text.unicode) == 't'){
+            if (event.type == sf::Event::TextEntered) {
+                if (static_cast<char>(event.text.unicode) == 't') {
                     DELAY--;
 
                 }
@@ -444,9 +421,9 @@ void MapEditor::settings() {
         eightInfo.setFont(fontSetting);
         velocityInfo.setFont(fontSetting);
 
-        widthInfo.setPosition(0,90);
-        eightInfo.setPosition(0,290);
-        velocityInfo.setPosition(0,490);
+        widthInfo.setPosition(0, 90);
+        eightInfo.setPosition(0, 290);
+        velocityInfo.setPosition(0, 490);
 
         widthText.setFont(fontSetting);
         heightText.setFont(fontSetting);
@@ -456,14 +433,16 @@ void MapEditor::settings() {
         heightText.setString("Grid height: ");
         velocityText.setString("Delay(millisecond): ");
 
-        widthText.setPosition(0,50);
-        heightText.setPosition(0,250);
-        velocityText.setPosition(0,450);
+        widthText.setPosition(0, 50);
+        heightText.setPosition(0, 250);
+        velocityText.setPosition(0, 450);
 
-        Button widthButton(500, widthText.getPosition().y - (widthText.getGlobalBounds().height/2), std::to_string(MAP_WIDTH));
-        Button heightButton(500, heightText.getPosition().y - (heightText.getGlobalBounds().height/2), std::to_string(MAP_HEIGHT));
-        Button velocityButton(500, velocityText.getPosition().y - (velocityText.getGlobalBounds().height/2), std::to_string(DELAY));
-
+        Button widthButton(500, widthText.getPosition().y - (widthText.getGlobalBounds().height / 2),
+                           std::to_string(MAP_WIDTH));
+        Button heightButton(500, heightText.getPosition().y - (heightText.getGlobalBounds().height / 2),
+                            std::to_string(MAP_HEIGHT));
+        Button velocityButton(500, velocityText.getPosition().y - (velocityText.getGlobalBounds().height / 2),
+                              std::to_string(DELAY));
 
 
         setting.clear(sf::Color(36, 36, 37));
@@ -494,9 +473,9 @@ void MapEditor::drawMap() {
 
     tile = new sf::RectangleShape(sf::Vector2f(TILE_WIDTH, TILE_HEIGHT));
 
-    grid = new Grid(MAP_WIDTH,MAP_HEIGHT);
+    grid = new Grid(MAP_WIDTH, MAP_HEIGHT);
     //instantiate 2d object array for the map
-    map = new sf::RectangleShape*[MAP_WIDTH];
+    map = new sf::RectangleShape *[MAP_WIDTH];
     for (int i = 0; i < MAP_WIDTH; ++i)
         map[i] = new sf::RectangleShape[MAP_HEIGHT];
     //create the map
@@ -505,7 +484,7 @@ void MapEditor::drawMap() {
 
             map[i][j] = *(tile);
             map[i][j].setSize(cellSize);
-            map[i][j].setPosition(sf::Vector2f(i*TILE_WIDTH + TILE_THICKNESS, j*TILE_HEIGHT+ TILE_THICKNESS));
+            map[i][j].setPosition(sf::Vector2f(i * TILE_WIDTH + TILE_THICKNESS, j * TILE_HEIGHT + TILE_THICKNESS));
             map[i][j].setFillColor(sf::Color::White);
             map[i][j].setOutlineColor(sf::Color::Blue);
             map[i][j].setOutlineThickness(5.0f);

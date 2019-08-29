@@ -11,6 +11,6 @@ void Subject::register_observer(Observer &o) {
 
 void Subject::notify_observers(GridLocation& locPut, std::string description) {
     for (Observer &o : observers) {
-        o.notify(locPut, description);
+        o.update(locPut, description);
     }
 }

@@ -8,7 +8,11 @@
 
 //TODO comment and refactor the entire code
 //TODO write the test function for the laboratory
-//TODO build the git-hub page for laboraory
+//TODO build the git-hub page for laboraotory
+
+//TODO make class grid e grid location a real class with getter and setter
+//TODO implements test on search alghorithm
+//TODO Controlla che i livelli di accesso siano giusti
 
 int main(){
 

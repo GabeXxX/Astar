@@ -90,7 +90,7 @@ public:
 
     void drawMap();
 
-    void notify(GridLocation& locPut, std::string description)override;
+    void update(GridLocation &locPut, std::string description) override;
 };
 
 

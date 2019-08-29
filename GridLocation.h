@@ -10,7 +10,7 @@
 #include <iostream>
 
 
-
+//TODO ke a rela class
 class GridLocation {
 
 public:
