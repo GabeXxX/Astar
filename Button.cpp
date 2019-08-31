@@ -5,10 +5,9 @@
 #include <iostream>
 #include "Button.h"
 
-Button::Button(float x, float y, std::string text) : x(x), y(y), text(text){
+Button::Button(float x, float y, std::string text) : x(x), y(y), text(text) {
 
-    if (!fontButton.loadFromFile("../Font/menlo.ttc"))
-    {
+    if (!fontButton.loadFromFile("../Font/menlo.ttc")) {
         // handle error
     }
 
@@ -37,24 +36,20 @@ bool Button::clicked(sf::Event &event) {
 
     bool one = false;
     bool two = false;
-    if (event.type == sf::Event::MouseButtonPressed)
-    {
-        if (event.mouseButton.button == sf::Mouse::Left)
-        {
-            if(event.mouseButton.x>x && event.mouseButton.x< x+BUTTON_WIDTH &&
-                event.mouseButton.y>y && event.mouseButton.y< y+BUTTON_HEIGHT){
-                shapeButton.setFillColor(sf::Color(128,128,128));
+    if (event.type == sf::Event::MouseButtonPressed) {
+        if (event.mouseButton.button == sf::Mouse::Left) {
+            if (event.mouseButton.x > x && event.mouseButton.x < x + BUTTON_WIDTH &&
+                event.mouseButton.y > y && event.mouseButton.y < y + BUTTON_HEIGHT) {
+                shapeButton.setFillColor(sf::Color(128, 128, 128));
 
             }
         }
     }
 
-    if (event.type == sf::Event::MouseButtonReleased)
-    {
-        if (event.mouseButton.button == sf::Mouse::Left)
-        {
-            if(event.mouseButton.x>x && event.mouseButton.x< x+BUTTON_WIDTH &&
-               event.mouseButton.y>y && event.mouseButton.y< y+BUTTON_HEIGHT){
+    if (event.type == sf::Event::MouseButtonReleased) {
+        if (event.mouseButton.button == sf::Mouse::Left) {
+            if (event.mouseButton.x > x && event.mouseButton.x < x + BUTTON_WIDTH &&
+                event.mouseButton.y > y && event.mouseButton.y < y + BUTTON_HEIGHT) {
                 shapeButton.setFillColor(sf::Color::White);
 
                 return true;

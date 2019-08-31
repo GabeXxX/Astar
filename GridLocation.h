@@ -9,14 +9,22 @@
 #include <tuple>
 #include <iostream>
 
-
-//TODO ke a rela class
 class GridLocation {
 
 public:
     GridLocation(int x, int y);
 
     GridLocation();
+
+    int getX() const;
+
+    void setX(int x);
+
+    int getY() const;
+
+    void setY(int y);
+
+private:
 
     int x;
 
@@ -25,22 +33,25 @@ public:
 
 namespace std {
 /* implement hash function so we can put GridLocation into an unordered_set */
-    template <> struct hash<GridLocation> {
+    template<>
+    struct hash<GridLocation> {
         typedef GridLocation argument_type;
         typedef std::size_t result_type;
-        std::size_t operator()(const GridLocation& id) const noexcept {
-            return std::hash<int>()(id.x ^ (id.y << 4));
+
+        std::size_t operator()(const GridLocation &id) const noexcept {
+            return std::hash<int>()(id.getX() ^ (id.getY() << 4));
         }
     };
 }
 
-bool operator == (GridLocation a, GridLocation b);
+bool operator==(GridLocation a, GridLocation b);
 
-bool operator != (GridLocation a, GridLocation b);
+bool operator!=(GridLocation a, GridLocation b);
 
-bool operator < (GridLocation a, GridLocation b);
+bool operator<(GridLocation a, GridLocation b);
 
-std::basic_iostream<char>::basic_ostream& operator<<(std::basic_iostream<char>::basic_ostream& out, const GridLocation& loc);
+std::basic_iostream<char>::basic_ostream &
+operator<<(std::basic_iostream<char>::basic_ostream &out, const GridLocation &loc);
 
 
 

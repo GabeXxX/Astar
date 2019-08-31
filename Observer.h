@@ -8,12 +8,10 @@
 #include "GridLocation.h"
 
 
-class Observer
-{
+class Observer {
 public:
     virtual void update(GridLocation &locPut, std::string description) = 0;
 };
-
 
 
 #endif //ASTAR_OBSERVER_H

@@ -14,7 +14,6 @@
 #include "Grid.h"
 
 
-
 template<typename T, typename priority_t>
 struct PriorityQueue {
     typedef std::pair<priority_t, T> PQElement;
@@ -36,17 +35,19 @@ struct PriorityQueue {
 };
 
 
-class Search : Subject{
+class Search : Subject {
 
 public:
 
-    Search(Observer& o);
+    Search();
+
+    Search(Observer &o);
 
     double heuristic(GridLocation a, GridLocation b);
 
-    void aStar(Grid graph,GridLocation start,GridLocation goal,
-               std::unordered_map<GridLocation, GridLocation>& came_from,
-               std::unordered_map<GridLocation, double>& cost_so_far);
+    void aStar(Grid graph, GridLocation start, GridLocation goal,
+               std::unordered_map<GridLocation, GridLocation> &came_from,
+               std::unordered_map<GridLocation, double> &cost_so_far);
 
     std::vector<GridLocation> reconstruct_path(
             GridLocation start, GridLocation goal,
@@ -54,12 +55,9 @@ public:
 
     void register_observer(Observer &o) override;
 
-    void notify_observers(GridLocation& locPut, std::string description) override;
+    void notify_observers(GridLocation &locPut, std::string description) override;
 
 };
-
-
-
 
 
 #endif //ASTAR_SEARCH_H

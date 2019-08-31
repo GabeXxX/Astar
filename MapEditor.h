@@ -12,11 +12,10 @@
 #include "Button.h"
 
 
-
-class MapEditor : Observer{
+class MapEditor : Observer {
 private:
 
-    const int  WINDOW_WIDTH = 1800;
+    const int WINDOW_WIDTH = 1800;
 
     const int WINDOW_HEIGHT = 1200;
 
@@ -52,10 +51,14 @@ private:
 
     std::unordered_map<GridLocation, double> cost_so_far;
 
-    Button menu[4] = {Button(WINDOW_WIDTH-(CONTROL_PANE_WIDTH/2)-Button::BUTTON_WIDTH/2+TILE_THICKNESS, (WINDOW_HEIGHT/2)-(Button::BUTTON_HEIGHT/2)-300, "Run"),
-                       Button(WINDOW_WIDTH-(CONTROL_PANE_WIDTH/2)-Button::BUTTON_WIDTH/2+TILE_THICKNESS, (WINDOW_HEIGHT/2)-(Button::BUTTON_HEIGHT/2)-100, "Reset"),
-                        Button(WINDOW_WIDTH-(CONTROL_PANE_WIDTH/2)-Button::BUTTON_WIDTH/2+TILE_THICKNESS, (WINDOW_HEIGHT/2)-(Button::BUTTON_HEIGHT/2)+100, "Instructions"),
-                         Button(WINDOW_WIDTH-(CONTROL_PANE_WIDTH/2)-Button::BUTTON_WIDTH/2+TILE_THICKNESS, (WINDOW_HEIGHT/2)-(Button::BUTTON_HEIGHT/2)+300, "Settings")};
+    Button menu[4] = {Button(WINDOW_WIDTH - (CONTROL_PANE_WIDTH / 2) - Button::BUTTON_WIDTH / 2 + TILE_THICKNESS,
+                             (WINDOW_HEIGHT / 2) - (Button::BUTTON_HEIGHT / 2) - 300, "Run"),
+                      Button(WINDOW_WIDTH - (CONTROL_PANE_WIDTH / 2) - Button::BUTTON_WIDTH / 2 + TILE_THICKNESS,
+                             (WINDOW_HEIGHT / 2) - (Button::BUTTON_HEIGHT / 2) - 100, "Reset"),
+                      Button(WINDOW_WIDTH - (CONTROL_PANE_WIDTH / 2) - Button::BUTTON_WIDTH / 2 + TILE_THICKNESS,
+                             (WINDOW_HEIGHT / 2) - (Button::BUTTON_HEIGHT / 2) + 100, "Instructions"),
+                      Button(WINDOW_WIDTH - (CONTROL_PANE_WIDTH / 2) - Button::BUTTON_WIDTH / 2 + TILE_THICKNESS,
+                             (WINDOW_HEIGHT / 2) - (Button::BUTTON_HEIGHT / 2) + 300, "Settings")};
 
 
 public:

@@ -25,9 +25,9 @@ private:
 public:
     Button(float width, float height, std::string text);
 
-    void draw(sf::RenderWindow& window);
+    void draw(sf::RenderWindow &window);
 
-    bool clicked(sf::Event& event);
+    bool clicked(sf::Event &event);
 
     static const int BUTTON_WIDTH = 250;
 

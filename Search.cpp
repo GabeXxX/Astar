@@ -3,18 +3,23 @@
 //
 #include "Search.h"
 
-Search::Search(Observer& o){
+Search::Search(Observer &o) {
     register_observer(o);
 
 }
 
-double Search::heuristic(GridLocation a, GridLocation b) {
-    return std::abs(a.x - b.x) + std::abs(a.y - b.y);
+
+Search::Search() {
+
 }
 
-void Search::aStar(Grid graph,GridLocation start,GridLocation goal,
-           std::unordered_map<GridLocation, GridLocation>& came_from,
-           std::unordered_map<GridLocation, double>& cost_so_far){
+double Search::heuristic(GridLocation a, GridLocation b) {
+    return std::abs(a.getX() - b.getX()) + std::abs(a.getY() - b.getY());
+}
+
+void Search::aStar(Grid graph, GridLocation start, GridLocation goal,
+                   std::unordered_map<GridLocation, GridLocation> &came_from,
+                   std::unordered_map<GridLocation, double> &cost_so_far) {
 
     PriorityQueue<GridLocation, double> frontier;
 
@@ -69,6 +74,7 @@ void Search::register_observer(Observer &o) {
     Subject::register_observer(o);
 }
 
-void Search::notify_observers(GridLocation& locPut, std::string description) {
+void Search::notify_observers(GridLocation &locPut, std::string description) {
     Subject::notify_observers(locPut, description);
 }
+

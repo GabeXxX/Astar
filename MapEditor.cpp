@@ -3,8 +3,6 @@
 //
 
 #include "MapEditor.h"
-#include "Search.h"
-#include "Button.h"
 
 MapEditor::MapEditor() :
         TILE_WIDTH(((WINDOW_WIDTH - CONTROL_PANE_WIDTH) / MAP_WIDTH)),
@@ -64,14 +62,14 @@ void MapEditor::setStart() {
         int j = (mousePosition.y - TILE_THICKNESS) / TILE_HEIGHT;
         //std::cout << "Position: " << "(" << i << "," << j << ")" << std::endl;
 
-        map[start.x][start.y].setFillColor(sf::Color::White); //reset color
+        map[start.getX()][start.getY()].setFillColor(sf::Color::White); //reset color
 
-        start.x = i;  //assign new start coordinates
-        start.y = j;
+        start.setX(i);  //assign new start coordinates
+        start.setY(j);
     }
 
-    int i = start.x;
-    int j = start.y;
+    int i = start.getX();
+    int j = start.getY();
     map[i][j].setFillColor(sf::Color::Magenta); //update color on grid for the new start point
 
 }
@@ -88,14 +86,14 @@ void MapEditor::setGoal() {
         int j = (mousePosition.y - TILE_THICKNESS) / TILE_HEIGHT;
         //std::cout << "Position: " << "(" << i << "," << j << ")" << std::endl;
 
-        map[goal.x][goal.y].setFillColor(sf::Color::White); //reset color
+        map[goal.getX()][goal.getY()].setFillColor(sf::Color::White); //reset color
 
-        goal.x = i;  //assign new goal coordinates
-        goal.y = j;
+        goal.setX(i); //assign new goal coordinates
+        goal.setY(j);
     }
 
-    int i = goal.x;
-    int j = goal.y;
+    int i = goal.getX();
+    int j = goal.getY();
     map[i][j].setFillColor(sf::Color::Red); //update color on grid for the new goal point
 
 }
@@ -178,8 +176,8 @@ void MapEditor::update(GridLocation &locPut, std::string description) {
 
     sf::sleep(sf::milliseconds(DELAY));
 
-    int i = locPut.x;
-    int j = locPut.y;
+    int i = locPut.getX();
+    int j = locPut.getY();
 
     if (description == "FRONTIER") {
         map[i][j].setFillColor(sf::Color::Cyan);
@@ -214,13 +212,13 @@ void MapEditor::resetGrid() {
         }
     }
 
-    start.x = 0;
-    start.y = 0;
-    map[start.x][start.y].setFillColor(sf::Color::Magenta);
+    start.setX(0);
+    start.setY(0);
+    map[start.getX()][start.getY()].setFillColor(sf::Color::Magenta);
 
-    goal.x = MAP_WIDTH - 1;
-    goal.y = MAP_HEIGHT - 1;
-    map[start.x][start.y].setFillColor(sf::Color::Red);
+    goal.setX(MAP_WIDTH - 1);
+    goal.setY(MAP_HEIGHT - 1);
+    map[start.getX()][start.getY()].setFillColor(sf::Color::Red);
 
     grid->forests.clear();
 

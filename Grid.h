@@ -12,19 +12,9 @@
 #include "GridLocation.h"
 
 
-
 class Grid {
 private:
     static std::array<GridLocation, 4> DIRS;
-
-    /*int width;
-
-    int height;
-
-    std::unordered_set<GridLocation> walls;
-
-    std::unordered_set<GridLocation> forests;*/
-
 
 public:
     int width;
@@ -50,7 +40,6 @@ public:
     void setForests(GridLocation loc);
 
 };
-
 
 
 #endif //ASTAR_GRID_H

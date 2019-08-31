@@ -10,12 +10,11 @@
 #include "Observer.h"
 #include "GridLocation.h"
 
-class Subject
-{
+class Subject {
 public:
-    virtual void register_observer(Observer& o);
+    virtual void register_observer(Observer &o);
 
-    virtual void notify_observers(GridLocation& locPut, std::string description);
+    virtual void notify_observers(GridLocation &locPut, std::string description);
 
 private:
     std::vector<std::reference_wrapper<Observer>> observers;
